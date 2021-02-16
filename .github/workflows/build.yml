@@ -28,3 +28,7 @@ jobs:
     - name: Build
       run: |
         sam build
+
+    - name: Dump 💩
+      run: |
+        cat .aws-sam/build/template.yaml
