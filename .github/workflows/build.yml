@@ -1,0 +1,59 @@
+name: Build and Preview
+
+on:
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    environment: default
+    steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      working-directory: hello-world
+      run: |
+        npm ci
+
+    - name: Run unit tests
+      working-directory: hello-world
+      run: |
+        npm t
+
+    - name: Validate
+      run: |
+        sam validate
+
+    - name: Build
+      run: |
+        sam build
+
+  preview:
+    needs: build
+    name: Preview
+    runs-on: ubuntu-latest
+    environment: preview
+    steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "$GITHUB_CONTEXT"
