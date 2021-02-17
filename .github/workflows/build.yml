@@ -5,7 +5,7 @@ on:
     branches:
     - main
   workflow_dispatch:
-  
+
 jobs:
   build:
     name: Build
@@ -21,17 +21,23 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Install dependencies
+      working-directory: hello-world
+      run: |
+        npm ci
+
+    - name: Run unit tests
+      working-directory: hello-world
+      run: |
+        npm t
+
     - name: Validate
       run: |
         sam validate
-        
+
     - name: Build
       run: |
         sam build
-
-    - name: Dump 💩
-      run: |
-        cat .aws-sam/build/template.yaml
 
     - name: Deploy
       run: |
