@@ -1,17 +1,13 @@
-name: Build
+name: Deploy
 
 on:
   push:
     branches:
     - main
-  pull_request:
-    branches:
-    - main
-  workflow_dispatch:
 
 jobs:
-  build:
-    name: Build
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     environment: production
     steps:
