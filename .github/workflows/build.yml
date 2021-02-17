@@ -81,3 +81,7 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: |
         echo "$GITHUB_CONTEXT"
+
+    - name: Deploy preview
+      run: |
+        sam deploy --stack-name pull-request-${{ github.event.number }}
