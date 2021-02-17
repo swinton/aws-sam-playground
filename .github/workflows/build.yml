@@ -13,6 +13,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    environment: production
     steps:
     # - name: Setup AWS SAM CLI
     #   uses: aws-actions/setup-aws-sam-cli@v1
@@ -48,5 +49,6 @@ jobs:
         sam build
 
     - name: Deploy
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: |
         sam deploy
