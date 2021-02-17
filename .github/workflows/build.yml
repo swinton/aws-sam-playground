@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: default
     steps:
+    # - name: Setup AWS SAM CLI
+    #   uses: aws-actions/setup-aws-sam-cli@v1
+    #   with:
+    #     version: 1.18.*
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -51,6 +56,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: preview
     steps:
+    # - name: Setup AWS SAM CLI
+    #   uses: aws-actions/setup-aws-sam-cli@v1
+    #   with:
+    #     version: 1.18.*
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
