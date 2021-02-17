@@ -39,6 +39,12 @@ jobs:
       run: |
         sam build
 
+    - name: Preserve build artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifact
+        path: .aws-sam
+
   preview:
     needs: build
     name: Preview
@@ -51,6 +57,14 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Restore build artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: build-artifact
 
     - name: Context
       env:
