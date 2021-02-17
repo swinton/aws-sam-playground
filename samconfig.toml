@@ -1,9 +1,46 @@
+# The AWS SAM CLI uses TOML tables to group configuration entries by environment and command
+# The format of the table header is [environment.command.parameters]
+
 version = 0.1
-[default]
-[default.deploy]
+
 [default.deploy.parameters]
+# The name of the AWS CloudFormation stack
+# you're deploying to. If you specify an
+# existing stack, the command updates the
+# stack. If you specify a new stack, the
+# command creates it.
 stack_name = "aws-sam-playground-app"
+
+# The name of the S3 bucket where this command
+# uploads your CloudFormation template. This
+# is required the deployments of templates
+# sized greater than 51,200 bytes
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1pvp4db67xsa0"
+
+# A prefix name that the command adds to the
+# artifacts' name when it uploads them to the
+# S3 bucket. The prefix name is a path name
+# (folder name) for the S3 bucket.
 s3_prefix = "aws-sam-playground-app"
+
+# The AWS Region of the service (e.g. us-east-1).
 region = "us-east-1"
+
+# A list of  capabilities  that  you  must
+# specifybefore  AWS  Cloudformation  can
+# create certain stacks. Some stack tem-plates
+# might include resources that can affect
+# permissions in your  AWSaccount,  for
+# example, by creating new AWS Identity and
+# Access Manage-ment (IAM) users. For those
+# stacks,  you  must  explicitly
+# acknowledgetheir  capabilities by specifying
+# this parameter. The only valid valuesare
+# CAPABILITY_IAM and CAPABILITY_NAMED_IAM. If
+# you have IAM resources,you  can specify
+# either capability. If you have IAM resources
+# with cus-tom names, you must specify
+# CAPABILITY_NAMED_IAM. If you don't
+# specifythis  parameter, this action returns
+# an InsufficientCapabilities error.
 capabilities = "CAPABILITY_IAM"
