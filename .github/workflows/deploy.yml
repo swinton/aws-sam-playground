@@ -1,15 +1,15 @@
-name: Build and Preview
+name: Deploy
 
 on:
-  pull_request:
+  push:
     branches:
     - main
 
 jobs:
-  build:
-    name: Build
+  deploy-staging:
+    name: Deploy to staging
     runs-on: ubuntu-latest
-    environment: default
+    environment: staging
     steps:
     # - name: Setup AWS SAM CLI
     #   uses: aws-actions/setup-aws-sam-cli@v1
@@ -50,11 +50,22 @@ jobs:
         name: build-artifact
         path: .aws-sam
 
-  preview:
-    needs: build
-    name: Preview
+    - name: Deploy
+      run: |
+        sam deploy --stack-name ${{ secrets.STACK_NAME }}
+
+    - name: Run integration tests
+      working-directory: hello-world
+      env:
+        AWS_SAM_STACK_NAME: ${{ secrets.STACK_NAME }}
+      run: |
+        npm run-script integ-test
+
+  deploy-production:
+    needs: deploy-staging
+    name: Deploy to production
     runs-on: ubuntu-latest
-    environment: preview
+    environment: production
     steps:
     # - name: Setup AWS SAM CLI
     #   uses: aws-actions/setup-aws-sam-cli@v1
@@ -76,12 +87,6 @@ jobs:
       with:
         name: build-artifact
 
-    - name: Context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
+    - name: Deploy
       run: |
-        echo "$GITHUB_CONTEXT"
-
-    - name: Deploy preview
-      run: |
-        sam deploy --stack-name pull-request-${{ github.event.number }}
+        sam deploy --stack-name ${{ secrets.STACK_NAME }}
